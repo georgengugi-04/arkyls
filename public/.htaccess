@@ -1,0 +1,20 @@
+# Apache: SPA fallback so /projects, /about … work on refresh, while /api/* and real files are served as-is.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !^/api/
+  RewriteRule ^ /index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Vite fingerprints JS/CSS/fonts in /assets, so they can be cached forever.
+  <If "%{REQUEST_URI} =~ m#^/assets/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  <FilesMatch "\.(webp|jpg|svg)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
