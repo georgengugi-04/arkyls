@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Canvas, useThree } from '@react-three/fiber';
 import { ContactShadows, OrbitControls } from '@react-three/drei';
 import { useInView, useReducedMotion } from 'motion/react';
@@ -19,6 +20,14 @@ function TouchScroll() {
   return null;
 }
 
+=======
+import { Canvas } from '@react-three/fiber';
+import { ContactShadows, OrbitControls } from '@react-three/drei';
+import { useInView, useReducedMotion } from 'motion/react';
+import { useRef, type ReactNode } from 'react';
+import { palette } from './palette';
+
+>>>>>>> 32f8bdc2626bb6f10a271d8a83245e8ba1a4930f
 interface Props {
   children: ReactNode;
   className?: string;
@@ -53,8 +62,12 @@ export default function Canvas3D({ children, className, camera = [9, 6, 10], tar
           </>
         )}
         {children}
+<<<<<<< HEAD
         <TouchScroll />
         <OrbitControls makeDefault enablePan={false} enableZoom={false} autoRotate={autoRotate && !reduce} autoRotateSpeed={0.55} target={target} minPolarAngle={Math.PI / 6} maxPolarAngle={Math.PI / 2.05} enableDamping />
+=======
+        <OrbitControls enablePan={false} enableZoom={false} autoRotate={autoRotate && !reduce} autoRotateSpeed={0.55} target={target} minPolarAngle={Math.PI / 6} maxPolarAngle={Math.PI / 2.05} enableDamping />
+>>>>>>> 32f8bdc2626bb6f10a271d8a83245e8ba1a4930f
       </Canvas>
     </div>
   );
