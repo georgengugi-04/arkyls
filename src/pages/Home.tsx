@@ -17,6 +17,7 @@ import { services } from '@/data/services';
 import { stats } from '@/data/about';
 import { site } from '@/data/site';
 import { introSeen } from '@/lib/intro';
+import { scrollToId } from '@/lib/scroll';
 
 const HeroScene = lazy(() => import('@/components/three/HeroScene'));
 const parts = ['Roof garden', 'Floor plates', 'Service core', 'Glazing'];
@@ -28,7 +29,7 @@ function Hero() {
   const hint = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
 
   return (
-    <section ref={ref} className="theme-dark relative h-[230svh] bg-base text-fg">
+    <section ref={ref} className="theme-dark relative h-[230svh] bg-base text-fg max-md:h-[155svh]">
       <div className="sticky top-0 h-svh overflow-hidden">
         <div aria-hidden className="blueprint absolute inset-0" />
         <Scene fallback={<Poster alt="Render of an ARKYLS site plan" />}>
@@ -55,6 +56,16 @@ function Hero() {
           </div>
         </div>
 
+        <button
+          type="button"
+          onClick={() => scrollToId('studio')}
+          aria-label="Scroll down to the studio section"
+          className="mono absolute right-4 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-3 text-fg sm:right-8"
+        >
+          <span className="[writing-mode:vertical-rl]">Scroll</span>
+          <span className="grid size-12 animate-bob place-items-center border border-fg/50 bg-ink/60 backdrop-blur transition-colors hover:border-accent hover:bg-accent hover:text-ink"><ArrowDown width={18} /></span>
+        </button>
+
         <motion.div style={{ opacity: hint }} aria-hidden className="mono absolute bottom-6 left-1/2 hidden -translate-x-1/2 animate-bob items-center gap-2 text-dim md:flex"><span className="hidden pointer-fine:inline">Drag to orbit · </span>scroll to explode <ArrowDown width={14} /></motion.div>
       </div>
     </section>
@@ -67,7 +78,7 @@ export default function Home() {
       <Seo />
       <Hero />
 
-      <Section theme="light">
+      <Section theme="light" id="studio">
         <SectionHead index="01" label="Studio" />
         <div className="grid gap-12 lg:grid-cols-12">
           <p className="display text-[clamp(1.9rem,4vw,3.9rem)] !leading-[1.08] lg:col-span-9">
