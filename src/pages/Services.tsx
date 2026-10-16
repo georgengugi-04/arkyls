@@ -43,7 +43,7 @@ export default function Services() {
           <div className="sticky top-[72px] z-10 order-first h-[42svh] border-b border-rule bg-base lg:order-last lg:top-24 lg:h-[72svh] lg:border lg:border-rule">
             <div aria-hidden className="blueprint absolute inset-0" />
             <Scene fallback={<Poster id="b1" alt="" />}>
-              <ConstructionScene stage={stage} className="absolute inset-0" />
+              <ConstructionScene stage={stage} className="absolute inset-0 pointer-coarse:pointer-events-none" />
             </Scene>
             <p className="mono pointer-events-none absolute bottom-4 left-4 text-dim">Stage 0{stage + 1} / 04 — {process[stage]?.title}</p>
           </div>

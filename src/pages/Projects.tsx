@@ -38,7 +38,7 @@ function ModelStudio() {
           <Scene fallback={<Poster id="a1" alt="Render of an A-frame house" />}>
             <ViewerScene key={kind} kind={kind} sun={sun} exploded={exploded} className="absolute inset-0 cursor-grab active:cursor-grabbing" />
           </Scene>
-          <p className="mono pointer-events-none absolute bottom-4 left-5 text-dim">Drag to orbit</p>
+          <p className="mono pointer-events-none absolute bottom-4 left-5 text-dim"><span className="pointer-fine:hidden">Swipe sideways to rotate</span><span className="hidden pointer-fine:inline">Drag to orbit</span></p>
         </div>
 
         <div className="flex flex-col gap-8 bg-base p-6 lg:col-span-3">

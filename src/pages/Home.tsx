@@ -32,7 +32,7 @@ function Hero() {
       <div className="sticky top-0 h-svh overflow-hidden">
         <div aria-hidden className="blueprint absolute inset-0" />
         <Scene fallback={<Poster alt="Render of an ARKYLS site plan" />}>
-          <HeroScene progress={scrollYProgress} className="absolute inset-0 cursor-grab active:cursor-grabbing" />
+          <HeroScene progress={scrollYProgress} className="absolute inset-0 cursor-grab active:cursor-grabbing pointer-coarse:pointer-events-none" />
         </Scene>
 
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-between pb-[clamp(1.25rem,4vh,3rem)] pt-[88px]">
@@ -55,7 +55,7 @@ function Hero() {
           </div>
         </div>
 
-        <motion.div style={{ opacity: hint }} aria-hidden className="mono absolute bottom-6 left-1/2 hidden -translate-x-1/2 animate-bob items-center gap-2 text-dim md:flex">Drag to orbit · scroll to explode <ArrowDown width={14} /></motion.div>
+        <motion.div style={{ opacity: hint }} aria-hidden className="mono absolute bottom-6 left-1/2 hidden -translate-x-1/2 animate-bob items-center gap-2 text-dim md:flex"><span className="hidden pointer-fine:inline">Drag to orbit · </span>scroll to explode <ArrowDown width={14} /></motion.div>
       </div>
     </section>
   );
