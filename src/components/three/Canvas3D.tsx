@@ -1,8 +1,23 @@
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { ContactShadows, OrbitControls } from '@react-three/drei';
 import { useInView, useReducedMotion } from 'motion/react';
-import { useRef, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { palette } from './palette';
+
+/**
+ * OrbitControls sets `touch-action: none`, which makes a full-bleed canvas swallow every swipe and
+ * blocks page scroll on phones. `pan-y` hands vertical swipes back to the browser (page scrolls)
+ * while horizontal drags still orbit the model.
+ */
+function TouchScroll() {
+  const controls = useThree((s) => s.controls) as { domElement?: HTMLElement | null } | null;
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    if (!controls) return;
+    for (const el of [controls.domElement, gl.domElement]) if (el) el.style.touchAction = 'pan-y';
+  }, [controls, gl]);
+  return null;
+}
 
 interface Props {
   children: ReactNode;
@@ -38,7 +53,8 @@ export default function Canvas3D({ children, className, camera = [9, 6, 10], tar
           </>
         )}
         {children}
-        <OrbitControls enablePan={false} enableZoom={false} autoRotate={autoRotate && !reduce} autoRotateSpeed={0.55} target={target} minPolarAngle={Math.PI / 6} maxPolarAngle={Math.PI / 2.05} enableDamping />
+        <TouchScroll />
+        <OrbitControls makeDefault enablePan={false} enableZoom={false} autoRotate={autoRotate && !reduce} autoRotateSpeed={0.55} target={target} minPolarAngle={Math.PI / 6} maxPolarAngle={Math.PI / 2.05} enableDamping />
       </Canvas>
     </div>
   );
