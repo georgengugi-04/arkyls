@@ -1,7 +1,8 @@
-import { lazy, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { lazy, useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { Seo } from '@/components/ui/Seo';
 import { Button } from '@/components/ui/Button';
+import { Photo } from '@/components/ui/Photo';
 import { Section, SectionHead } from '@/components/ui/Section';
 import { ArrowDown } from '@/components/ui/Icons';
 import { LineReveal } from '@/components/effects/LineReveal';
@@ -20,55 +21,99 @@ import { introSeen } from '@/lib/intro';
 import { scrollToId } from '@/lib/scroll';
 
 const HeroScene = lazy(() => import('@/components/three/HeroScene'));
-const parts = ['Roof garden', 'Floor plates', 'Service core', 'Glazing'];
 
+const slides = [
+  { id: '00', alt: 'Aerial render of a courtyard residence with sports court' },
+  { id: 'a2', alt: 'A-frame house render on a grassy plot' },
+  { id: 'b6', alt: 'Apartment block render at golden hour' },
+  { id: 'c1', alt: 'Courtyard between two building wings with rooftop solar' },
+  { id: '202', alt: 'Two-storey building with glazed entrance core' },
+];
+
+/** Standard one-screen hero: cross-fading project renders behind the headline. No scroll hijacking. */
 function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
-  const pct = useTransform(scrollYProgress, (v) => String(Math.round(Math.min(1, v * 1.6) * 100)).padStart(3, '0') + '%');
-  const hint = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const reduce = useReducedMotion();
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = setInterval(() => setActive((i) => (i + 1) % slides.length), 6000);
+    return () => clearInterval(id);
+  }, [reduce]);
 
   return (
-    <section ref={ref} className="theme-dark relative h-[230svh] bg-base text-fg max-md:h-[155svh]">
-      <div className="sticky top-0 h-svh overflow-hidden">
-        <div aria-hidden className="blueprint absolute inset-0" />
-        <Scene fallback={<Poster alt="Render of an ARKYLS site plan" />}>
-          <HeroScene progress={scrollYProgress} className="absolute inset-0 cursor-grab active:cursor-grabbing pointer-coarse:pointer-events-none" />
-        </Scene>
+    <section className="theme-dark relative flex min-h-[100svh] flex-col justify-between overflow-hidden bg-base text-fg">
+      <div aria-hidden className="absolute inset-0">
+        {slides.map((sl, i) => (
+          <motion.div key={sl.id} className="absolute inset-0" initial={false} animate={{ opacity: i === active ? 1 : 0, scale: reduce ? 1 : i === active ? 1.08 : 1 }} transition={{ opacity: { duration: 1.4 }, scale: { duration: 7, ease: 'linear' } }}>
+            <Photo photo={{ id: sl.id, alt: '' }} priority={i === 0} sizes="100vw" />
+          </motion.div>
+        ))}
+        <div className="absolute inset-0 bg-ink/55" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-ink/70" />
+        <div className="blueprint absolute inset-0 opacity-60" />
+      </div>
 
-        <div className="pointer-events-none absolute inset-0 flex flex-col justify-between pb-[clamp(1.25rem,4vh,3rem)] pt-[88px]">
-          <div className="wrap mono flex justify-between text-dim">
-            <span>{site.tagline}</span>
-            <span className="hidden sm:block">1°17′S 36°49′E</span>
-            <span className="hidden md:block">Scale 1:200</span>
+      <div className="wrap mono relative flex justify-between pt-[96px] text-fg/70">
+        <span>{site.tagline}</span>
+        <span className="hidden sm:block">1°17′S 36°49′E</span>
+      </div>
+
+      <div className="wrap relative pb-[clamp(2rem,6vh,4rem)]">
+        <h1 className="display text-[clamp(3.25rem,10.5vw,10.5rem)]"><LineReveal delay={introSeen() ? 0.25 : 2.7}>Spaces built to endure.</LineReveal></h1>
+        <div className="mt-8 flex flex-wrap items-end justify-between gap-8">
+          <div>
+            <p className="max-w-lg text-[clamp(1rem,1.5vw,1.2rem)] text-fg/75">Innovative design and sustainable solutions — architecture drawn in Nairobi for places that last.</p>
+            <div className="mt-8 flex flex-wrap gap-4"><Button to="/projects">Explore our work</Button><Button to="/about" variant="outline">Our story</Button></div>
           </div>
-
-          <div className="wrap grid items-end gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-9">
-              <h1 className="display text-[clamp(3.25rem,10.5vw,10.5rem)]"><LineReveal delay={introSeen() ? 0.25 : 2.7}>Spaces built to endure.</LineReveal></h1>
-              <p className="mt-6 max-w-lg text-[clamp(1rem,1.5vw,1.2rem)] text-dim">Innovative design and sustainable solutions — architecture drawn in Nairobi for places that last.</p>
-              <div className="pointer-events-auto mt-8 flex flex-wrap gap-4"><Button to="/projects">Explore our work</Button><Button to="/about" variant="outline">Our story</Button></div>
+          <div className="flex items-center gap-6">
+            <div className="mono flex items-center gap-3 text-fg/70" role="group" aria-label="Hero images">
+              <span>{String(active + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}</span>
+              <span className="flex gap-1.5">
+                {slides.map((sl, i) => <button key={sl.id} type="button" aria-label={`Show image ${i + 1}`} aria-current={i === active} onClick={() => setActive(i)} className={`h-[3px] transition-all ${i === active ? 'w-8 bg-accent' : 'w-4 bg-fg/30 hover:bg-fg/60'}`} />)}
+              </span>
             </div>
-            <div className="mono hidden text-dim lg:col-span-3 lg:block lg:justify-self-end">
-              <p className="mb-3 text-fg">Exploded view <motion.span className="text-accent">{pct}</motion.span></p>
-              <ul className="space-y-1.5 border-t border-rule pt-3">{parts.map((p, i) => <li key={p}><span className="text-accent">{String.fromCharCode(65 + i)}</span> &nbsp;{p}</li>)}</ul>
-            </div>
+            <button type="button" onClick={() => scrollToId('studio')} aria-label="Scroll down to the studio section" className="mono group flex items-center gap-3 text-fg">
+              Scroll
+              <span className="grid size-12 animate-bob place-items-center border border-fg/50 bg-ink/60 backdrop-blur transition-colors group-hover:border-accent group-hover:bg-accent group-hover:text-ink"><ArrowDown width={18} /></span>
+            </button>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={() => scrollToId('studio')}
-          aria-label="Scroll down to the studio section"
-          className="mono absolute right-4 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center gap-3 text-fg sm:right-8"
-        >
-          <span className="[writing-mode:vertical-rl]">Scroll</span>
-          <span className="grid size-12 animate-bob place-items-center border border-fg/50 bg-ink/60 backdrop-blur transition-colors hover:border-accent hover:bg-accent hover:text-ink"><ArrowDown width={18} /></span>
-        </button>
-
-        <motion.div style={{ opacity: hint }} aria-hidden className="mono absolute bottom-6 left-1/2 hidden -translate-x-1/2 animate-bob items-center gap-2 text-dim md:flex"><span className="hidden pointer-fine:inline">Drag to orbit · </span>scroll to explode <ArrowDown width={14} /></motion.div>
       </div>
     </section>
+  );
+}
+
+const parts = ['Roof garden', 'Floor plates', 'Service core', 'Glazing'];
+
+/** In-flow 3D section: the building separates into floor plates as this block scrolls through the viewport. */
+function Anatomy() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 35%'] });
+  const explode = useTransform(scrollYProgress, [0.1, 0.75], [0, 1], { clamp: true });
+  const pct = useTransform(explode, (v) => String(Math.round(v * 100)).padStart(3, '0') + '%');
+
+  return (
+    <Section theme="dark" as="section" className="!py-[clamp(4rem,8vw,8rem)]">
+      <div ref={ref as React.RefObject<HTMLDivElement>}>
+        <SectionHead index="02" label="Building anatomy" title="Every floor, drawn apart." />
+        <div className="grid gap-px border border-rule bg-rule lg:grid-cols-12">
+          <div className="relative h-[60svh] min-h-[380px] bg-base lg:col-span-8 lg:h-[72svh]">
+            <div aria-hidden className="blueprint absolute inset-0" />
+            <Scene fallback={<Poster id="b6" alt="" />}>
+              <HeroScene progress={explode} className="absolute inset-0 cursor-grab active:cursor-grabbing pointer-coarse:pointer-events-none" />
+            </Scene>
+          </div>
+          <div className="flex flex-col justify-between gap-10 bg-base p-6 lg:col-span-4 lg:p-8">
+            <div>
+              <p className="mono mb-3 text-dim">Exploded view <motion.span className="text-accent">{pct}</motion.span></p>
+              <p className="text-[1.05rem] text-dim">Scroll and the model comes apart into its layers. On a computer you can also drag it to orbit.</p>
+            </div>
+            <ul className="mono space-y-2 border-t border-rule pt-4">{parts.map((p, i) => <li key={p}><span className="text-accent">{String.fromCharCode(65 + i)}</span> &nbsp;{p}</li>)}</ul>
+          </div>
+        </div>
+      </div>
+    </Section>
   );
 }
 
@@ -96,13 +141,15 @@ export default function Home() {
         </dl>
       </Section>
 
+      <Anatomy />
+
       <Section>
-        <SectionHead index="02" label="Selected work" title="Projects" aside={<Button to="/projects" variant="link">View all</Button>} />
+        <SectionHead index="03" label="Selected work" title="Projects" aside={<Button to="/projects" variant="link">View all</Button>} />
         <ProjectIndex projects={featured} />
       </Section>
 
       <Section theme="light">
-        <SectionHead index="03" label="Services" title="What we do" aside={<Button to="/services" variant="link">All services</Button>} />
+        <SectionHead index="04" label="Services" title="What we do" aside={<Button to="/services" variant="link">All services</Button>} />
         <ul>{services.slice(0, 4).map((s, i) => <ServiceRow key={s.slug} service={s} index={i} />)}</ul>
       </Section>
 

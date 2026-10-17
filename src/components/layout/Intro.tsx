@@ -18,8 +18,6 @@ export function Intro() {
 
   useEffect(() => {
     if (!show) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     const total = reduce ? 1200 : 3000;
     const t = setTimeout(close, total);
     const start = performance.now();
@@ -28,7 +26,7 @@ export function Intro() {
     raf = requestAnimationFrame(tick);
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
     window.addEventListener('keydown', onKey);
-    return () => { clearTimeout(t); cancelAnimationFrame(raf); window.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
+    return () => { clearTimeout(t); cancelAnimationFrame(raf); window.removeEventListener('keydown', onKey); };
   }, [show, reduce, close]);
 
   return (
