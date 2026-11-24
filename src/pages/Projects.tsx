@@ -122,7 +122,7 @@ export default function Projects() {
             </Reveal>
           ))}
         </ul>
-        <div className="mt-12"><Button to="/contact" variant="link">Commission a design</Button></div>
+        <div className="mt-12 flex flex-wrap gap-x-10 gap-y-4"><Button to="/portfolio" variant="link">See the full portfolio</Button><Button to="/contact" variant="link">Commission a design</Button></div>
       </Section>
 
       <Lightbox photos={photos} index={lightbox?.index ?? null} onChange={(i) => setLightbox(i === null ? null : { set: lightbox?.set ?? 'kiserian', index: i })} />

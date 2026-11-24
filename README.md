@@ -1,5 +1,38 @@
 # ARKYLS — Architecture & Design (v3)
 
+> Architecture & design studio, Nairobi. A marketing site with live 3D massing models, and a **Visual Portfolio** of 139 architectural visualisations across 11 design studies.
+
+<p>
+  <img src="public/images/atrium-hotel-23-1280.webp" alt="Aerial view of The Atrium Hotel" width="49%" />
+  <img src="public/images/hillside-villa-01-1280.webp" alt="Hillside Villa, front elevation" width="49%" />
+</p>
+<p>
+  <img src="public/images/courtyard-villa-01-1280.webp" alt="Courtyard Villa from the garden" width="32%" />
+  <img src="public/images/urban-blocks-01-1280.webp" alt="Five-storey mixed-use block" width="32%" />
+  <img src="public/images/chapel-01-1280.webp" alt="Chapel exterior" width="32%" />
+</p>
+
+## Visual Portfolio
+
+Open `/portfolio` to browse the studio's work: *Spaces, drawn in full.* Eleven studies, from a glass-atrium hotel and urban mixed-use blocks to hillside villas, stone cottages, garden pavilions, a chapel and the interiors inside them. Each study has a short write-up, a cover view and a keyboard-friendly lightbox.
+
+| Study | Type | Views |
+| --- | --- | --- |
+| The Atrium Hotel | Hospitality | 26 |
+| Urban Blocks | Mixed-use | 15 |
+| Courtyard Apartments | Residential | 10 |
+| Hillside Villa | Residential | 10 |
+| Contemporary Family Residence | Residential | 7 |
+| Courtyard Villa | Residential | 8 |
+| Country Homes & Cottages | Residential | 19 |
+| Garden Pavilions | Residential | 7 |
+| Chapel & Gathering Hall | Institutional | 7 |
+| Living Spaces | Interiors | 13 |
+| Kitchens, Bedrooms & Baths | Interiors | 17 |
+
+All images are 3D visualisations, not photographs of completed buildings. To add or reorder views, edit `src/data/portfolio.ts` and drop `<slug>-NN-640.webp` / `<slug>-NN-1280.webp` into `public/images/`.
+
+
 React 19 + TypeScript + Vite 8 + Tailwind CSS 4. Migrated from the static HTML/CSS/JS + PHP v2 site.
 
 ## Quick start
@@ -28,14 +61,14 @@ To use another backend, set `VITE_CONTACT_ENDPOINT`.
 
 ```
 src/
-  pages/            Route components (code-split via router lazy())
+  pages/            Route components (code-split via router lazy()); Portfolio.tsx = Visual Portfolio
   components/
     layout/         Header, Footer, Layout, Intro (welcome), PageTransition (louvre curtain + message)
     three/          React Three Fiber: Building (parametric), Models (A-frame, villa), scenes, Canvas3D, Scene (WebGL guard)
     ui/             Button, Section, Photo (srcset), Slider (Embla), Lightbox (<dialog>), Seo, Icons
     effects/        Reveal, LineReveal, CountUp
     features/       ProjectIndex, ProjectTile, ServiceRow, ContactForm, CtaBanner, Poster
-  data/             Typed content (site, projects, services, about) + transitions.ts (page-change messages)
+  data/             Typed content (site, projects, portfolio, services, about) + transitions.ts (page-change messages)
   lib/              contact schema + API client, image helpers, webgl check, intro flag
 api/                PHP endpoint + SQL schema
 ```
