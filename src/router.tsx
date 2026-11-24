@@ -15,6 +15,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, ...page(() => import('@/pages/Home')) },
       { path: 'projects', ...page(() => import('@/pages/Projects')) },
+      { path: 'portfolio', ...page(() => import('@/pages/Portfolio')) },
       { path: 'services', ...page(() => import('@/pages/Services')) },
       { path: 'about', ...page(() => import('@/pages/About')) },
       { path: 'contact', ...page(() => import('@/pages/Contact')) },

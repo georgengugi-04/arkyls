@@ -9,6 +9,7 @@ describe('routing', () => {
   it.each([
     ['/', /spaces\s+built\s+to\s+endure/i],
     ['/projects', /from\s+concept\s+to\s+creation/i],
+    ['/portfolio', /spaces,?\s+drawn\s+in\s+full/i],
     ['/services', /from\s+concept\s+to\s+creation/i],
     ['/about', /architecture\s+with\s+purpose/i],
     ['/contact', /build\s+something\s+together/i],
@@ -33,7 +34,7 @@ describe('routing', () => {
 describe('transition copy', () => {
   it('has a message for every route and a fallback', async () => {
     const { transitionFor } = await import('./data/transitions');
-    for (const p of ['/', '/projects', '/services', '/about', '/contact', '/projects/']) expect(transitionFor(p).message.length).toBeGreaterThan(5);
+    for (const p of ['/', '/projects', '/portfolio', '/services', '/about', '/contact', '/projects/']) expect(transitionFor(p).message.length).toBeGreaterThan(5);
     expect(transitionFor('/zzz').title).toBe('Off the map');
   });
 });

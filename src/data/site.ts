@@ -19,6 +19,7 @@ export const site = {
 export const nav = [
   { to: '/', label: 'Home', end: true },
   { to: '/projects', label: 'Projects' },
+  { to: '/portfolio', label: 'Portfolio' },
   { to: '/services', label: 'Services' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
