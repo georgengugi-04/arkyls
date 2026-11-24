@@ -5,6 +5,7 @@ export const transitions: Record<string, TransitionCopy> = {
   '/': { index: '00', title: 'Studio', message: 'Back to the studio.' },
   '/projects': { index: '01', title: 'Projects', message: 'Pulling the drawings from the plan chest.' },
   '/portfolio': { index: '05', title: 'Portfolio', message: 'Unrolling the full set of drawings.' },
+  '/cv': { index: '06', title: 'Curriculum vitae', message: 'Opening the studio file.' },
   '/services': { index: '02', title: 'Services', message: 'Laying out the scope of work.' },
   '/about': { index: '03', title: 'About', message: 'Meet the people behind the plans.' },
   '/contact': { index: '04', title: 'Contact', message: 'Let’s start a conversation.' },

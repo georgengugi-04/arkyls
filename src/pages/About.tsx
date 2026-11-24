@@ -1,4 +1,5 @@
 import { Seo } from '@/components/ui/Seo';
+import { Button } from '@/components/ui/Button';
 import { Photo } from '@/components/ui/Photo';
 import { Section, SectionHead } from '@/components/ui/Section';
 import { LineReveal } from '@/components/effects/LineReveal';
@@ -70,6 +71,7 @@ export default function About() {
             </Reveal>
           ))}
         </ul>
+        <div className="mt-12"><Button to="/cv" variant="link">Read Lenny’s full CV</Button></div>
       </Section>
 
       <CtaBanner label="Work with us" title="Have a project in mind?" body="Let's talk about your vision. We'd love to hear how we can help you create something remarkable." cta="Get in touch" />
